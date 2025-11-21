@@ -1,0 +1,1615 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>ATM Cash Optimization Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body { background:#0b0c10; color:#c5c6c7; }
+    .card { background:#1f2833; border: none; }
+    .form-control, .form-range { background:#0b0c10; color:#c5c6c7; border:1px solid #2f3a44; }
+    .btn-primary { background:#45a29e; border:none; }
+    .small-muted { color:#66fcf1; }
+    #chart { min-height: 360px; }
+
+    .text-info { color: #66fcf1 !important; }
+    /* Modal Styling for Dark Theme */
+    .modal-content { background: #1f2833; color: #c5c6c7; border: 1px solid #45a29e; }
+    .modal-header { border-bottom: 1px solid #2f3a44; }
+    .modal-footer { border-top: 1px solid #2f3a44; }
+    .btn-close { filter: invert(1); } /* Makes the 'x' visible on dark background */
+
+    .info-icon {
+      cursor: pointer;
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
+      text-align: center;
+      background: #45a29e;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .info-icon:hover {
+      background: #66fcf1;
+      color: #0b0c10;
+    }
+    .popover-body {
+      background: #1f2833;
+      color: #c5c6c7;
+      border: 1px solid #45a29e;
+      font-size: 0.9rem;
+    }
+    .popover-header {
+      background: #45a29e;
+      color: #fff;
+      border-bottom: 1px solid #2f3a44;
+    }
+
+    /* --- make form inputs and labels readable --- */
+    .form-label {
+      color: #66fcf1 !important;  /* bright cyan labels */
+      font-weight: 500;
+    }
+    .form-control, .form-range {
+      background: #0b0c10;
+      color: #f1f1f1;             /* lighter text inside input boxes */
+      border: 1px solid #45a29e;
+    }
+    .form-control::placeholder {
+      color: #999 !important;     /* slightly dim placeholder */
+    }
+    .form-control:focus {
+      border-color: #66fcf1;
+      box-shadow: 0 0 0 0.1rem rgba(102, 252, 241, 0.3);
+    }
+    .btn-primary { background:#45a29e; border:none; }
+    .btn-primary:hover { background:#66fcf1; color:#0b0c10; }
+
+    #summaryArea ul li {
+      margin-bottom: 4px;
+      color: #c5c6c7;
+    }
+    #summaryArea b {
+      color: #66fcf1;
+    }
+
+    /* --- Loader Overlay (dark theme adapted) --- */
+    .loader-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(11,12,16,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      pointer-events: all;
+      overflow: hidden;
+    }
+
+    .loader-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loader {
+      position: relative;
+      width: 80px;
+      height: 100px;
+    }
+
+    .loader__bar {
+      position: absolute;
+      bottom: 0;
+      width: 10px;
+      height: 50px;
+      background: #5dd9d1;
+      transform-origin: center bottom;
+      box-shadow: 0 0 6px rgba(102,252,241,0.6);
+      border-radius: 3px;
+    }
+
+    .loader__ball {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      background: #66fcf1;
+      border-radius: 50%;
+      animation: ball 4s infinite ease-in-out;
+    }
+
+    .loader__bar:nth-child(1){left:0;transform:scale(1,.2);animation:barUp1 4s infinite;}
+    .loader__bar:nth-child(2){left:15px;transform:scale(1,.4);animation:barUp2 4s infinite;}
+    .loader__bar:nth-child(3){left:30px;transform:scale(1,.6);animation:barUp3 4s infinite;}
+    .loader__bar:nth-child(4){left:45px;transform:scale(1,.8);animation:barUp4 4s infinite;}
+    .loader__bar:nth-child(5){left:60px;transform:scale(1,1);animation:barUp5 4s infinite;}
+
+    @keyframes ball {
+      0% {
+        transform: translate(0, 0);
+      }
+      5% {
+        transform: translate(8px, -14px);
+      }
+      10% {
+        transform: translate(15px, -10px)
+      }
+      17% {
+        transform: translate(23px, -24px)
+      }
+      20% {
+        transform: translate(30px, -20px)
+      }
+      27% {
+        transform: translate(38px, -34px)
+      }
+      30% {
+        transform: translate(45px, -30px)
+      }
+      37% {
+        transform: translate(53px, -44px)
+      }
+      40% {
+        transform: translate(60px, -40px)
+      }
+      50% {
+        transform: translate(60px, 0)
+      }
+      57% {
+        transform: translate(53px, -14px)
+      }
+      60% {
+        transform: translate(45px, -10px)
+      }
+      67% {
+        transform: translate(37px, -24px)
+      }
+      70% {
+        transform: translate(30px, -20px)
+      }
+      77% {
+        transform: translate(22px, -34px)
+      }
+      80% {
+        transform: translate(15px, -30px)
+      }
+      87% {
+        transform: translate(7px, -44px)
+      }
+      90% {
+        transform: translate(0, -40px)
+      }
+      100% {
+        transform: translate(0, 0);
+      }
+    }
+
+    @keyframes barUp1 { 
+      0% {
+        transform: scale(1, .2);
+      }
+      40%{
+        transform: scale(1, .2);
+      }
+      50% {
+        transform: scale(1, 1);
+      }
+      90% {
+        transform: scale(1,1);
+      }
+      100% {
+        transform: scale(1,.2);
+      }
+    }
+    @keyframes barUp2 { 
+      0% {
+        transform: scale(1, .4);
+      }
+      40% {
+        transform: scale(1, .4);
+      }
+      50% {
+        transform: scale(1, .8);
+      }
+      90% {
+        transform: scale(1, .8);
+      }
+      100% {
+        transform: scale(1, .4);
+      }
+    }
+    @keyframes barUp3 { 
+      0% {
+        transform: scale(1, .6);
+      }
+      100% {
+        transform: scale(1, .6);
+      }
+    }
+    @keyframes barUp4 { 
+      0% {
+        transform: scale(1, .8);
+      }
+      40% {
+        transform: scale(1, .8);
+      }
+      50% {
+        transform: scale(1, .4);
+      }
+      90% {
+        transform: scale(1, .4);
+      }
+      100% {
+        transform: scale(1, .8);
+      }
+    }
+    @keyframes barUp5 { 
+      0% {
+        transform: scale(1, 1);
+      }
+      40% {
+        transform: scale(1, 1);
+      }
+      50% {
+        transform: scale(1, .2);
+      }
+      90% {
+        transform: scale(1, .2);
+      }
+      100% {
+        transform: scale(1, 1);
+      }
+    }
+
+    /* --- Animated loader text --- */
+    .loader-text {
+      margin-top: 1.2rem;
+      color: #66fcf1;
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(102,252,241,0.7);
+      animation: blurPulse 2.5s infinite ease-in-out;
+    }
+
+    @keyframes blurPulse {
+      0% { filter: blur(2.5px); opacity: 0.6; }
+      50% { filter: blur(0px); opacity: 1; }
+      100% { filter: blur(2.5px); opacity: 0.6; }
+    }
+    
+    /* --- NEW: Quick Settings Card Styling --- */
+    #quickSettingsCard {
+      position: fixed;
+      top: 60px;
+      right: 40px;
+      width: 290px;
+      max-height: 80vh;
+      overflow-y: auto;
+      z-index: 1050; 
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+      transform: translateX(100%); /* Start off-screen */
+      opacity: 0;
+      pointer-events: none; /* Disable interaction when hidden */
+      border: 1px solid #45a29e;
+    }
+    #quickSettingsCard.show {
+      transform: translateX(0); /* Slide into view */
+      opacity: 1;
+      pointer-events: auto; /* Enable interaction when visible */
+    }
+    #quickSettingsCard .card-body {
+        padding: 10px;
+    }
+    #quickSettingsCard .form-control {
+        height: 25px; /* compact inputs */
+        padding: 3px 6px;
+        font-size: 0.8rem;
+        background: #f1f1f1;
+        color: #0b0c10;
+        border: 1px solid #45a29e;
+    }
+    #quickSettingsCard .form-control:focus {
+        background: #f1f1f1;
+        color: #0b0c10;
+        border-color: #66fcf1;
+        box-shadow: 0 0 0 0.1rem rgba(102, 252, 241, 0.3);
+    }
+    #quickSettingsCard .form-label {
+        font-size: 0.7rem;
+        margin-bottom: 2px;
+        color: #c5c6c7 !important;
+        font-weight: normal;
+    }
+  </style>
+</head>
+
+<div id="loaderOverlay" class="loader-overlay d-none">
+  <div class="loader-wrapper">
+    <div class="loader">
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__ball"></div>
+    </div>
+    <p class="loader-text">Running Sims...</p>
+  </div>
+</div>
+
+<body class="p-4">
+  <div class="container">
+    <h2 class="mb-3 text-info">💰 ATM Cash Optimization — Heuristic Comparison</h2> 
+    <div class="row mb-3">
+      <div class="col-lg-9">
+        <div class="card p-3 mb-3" id="mainSettingsContainer">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="text-info mb-0">Simulation Parameters</h5>
+            <div>
+              <label for="presetSelect" class="form-label small-muted mb-0 me-2 d-inline">Load Preset:</label>
+              <select id="presetSelect" class="form-select form-select-sm d-inline-block" style="width: auto;">
+                <option value="custom">Custom Settings</option>
+              </select>
+            </div>
+          </div>
+          <div class="row g-2">
+            <div class="col-md-3">
+              <label class="form-label">
+                Opportunity Cost (%)
+                <span class="info-icon" data-bs-toggle="popover" data-bs-trigger="click" data-bs-content="Daily cost of holding cash (lost interest/investment). Higher values encourage more refills to keep cash low. Range: 0.001-0.1 typical.">?</span>
+              </label>
+              <input id="oppo_rate" class="form-control" type="number" step="0.001" value="0.01" min="0">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">
+                Refill Cost ($)
+                <span class="info-icon" data-bs-toggle="popover" data-bs-trigger="click" data-bs-content="Fixed cost per refill transaction. Higher values reduce refill frequency. Typical: 500-5000.">?</span>
+              </label>
+              <input id="refill_cost" class="form-control" type="number" step="1" value="1000" min="0">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">
+                Shortage Fine ($)
+                <span class="info-icon" data-bs-toggle="popover" data-bs-trigger="click" data-bs-content="Penalty when cash runs out. Higher values force more conservative refill policies to avoid shortages. Typical: 5000-50000.">?</span>
+              </label>
+              <input id="shortage_fine" class="form-control" type="number" step="1" value="10000" min="0">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">
+                Lookahead Days
+                <span class="info-icon" data-bs-toggle="popover" data-bs-trigger="click" data-bs-content="Heuristic prediction window. Higher values improve planning for demand spikes but increase computation. Typical: 2-7 days.">?</span> </label>
+              <input id="lookahead" class="form-control" type="number" step="1" value="2" min="1" max="365">
+            </div>
+          </div>
+
+          <div class="row g-2 mt-3">
+            <h6 class="text-info mt-3">🏦 Heuristic Settings (PSO, GA, ABC)</h6> 
+            <div class="col-md-3">
+              <label class="form-label">
+                Population Size
+                <span class="info-icon" data-bs-toggle="popover" data-bs-trigger="click" data-bs-content="Number of candidate solutions (particles/individuals/bees). Higher values explore more options but increase runtime. Typical: 20-50.">?</span> </label>
+              <input id="n_particles" class="form-control" type="number" step="1" value="30" min="1" max="500">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">
+                Iterations/Generations
+                <span class="info-icon" data-bs-toggle="popover" data-bs-trigger="click" data-bs-content="Number of optimization rounds. More iterations improve solution quality but cost more compute time. Typical: 20-100.">?</span> </label>
+              <input id="iters" class="form-control" type="number" step="1" value="40" min="1" max="500">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">
+                Alpha Bound
+                <span class="info-icon" data-bs-toggle="popover" data-bs-trigger="click" data-bs-content="Upper limit for refill scaling factor (α). Controls max refill amount relative to predicted demand. Typical: 1-5.">?</span>
+              </label>
+              <input id="alpha_bound" class="form-control" type="number" step="0.1" value="3.0" min="0">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">
+                Threshold Multiplier
+                <span class="info-icon" data-bs-toggle="popover" data-bs-trigger="click" data-bs-content="Upper limit for refill threshold (in multiples of max demand). Controls when the policy decides to refill. Typical: 0.5-3.">?</span>
+              </label>
+              <input id="threshold_mult" class="form-control" type="number" step="0.1" value="1.5" min="0">
+            </div>
+          </div>
+
+          <div class="row g-2 mt-3">
+            <h6 class="text-info mt-3">⚙️ Miller–Orr Settings</h6>
+            <div class="col-12 mb-2">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="m_auto" checked>
+                <label class="form-check-label small-muted" for="m_auto">
+                  Auto bounds (use data percentiles)
+                  <span class="info-icon" data-bs-toggle="popover" data-bs-trigger="click" data-bs-content="When ON: uses 25th percentile for lower bound, 75th for upper bound. When OFF: use custom values below." onclick="event.stopPropagation()">?</span>
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">
+                Lower Bound ($)
+                <span class="info-icon" data-bs-toggle="popover" data-bs-trigger="click" data-bs-content="Trigger level for refill. If cash drops below this, Miller–Orr initiates a refill to target level.">?</span>
+              </label>
+              <input id="m_lower" class="form-control" type="number" step="1" value="5000" min="0">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">
+                Target Balance ($)
+                <span class="info-icon" data-bs-toggle="popover" data-bs-trigger="click" data-bs-content="Desired cash level after refill. Refills bring cash up to this amount.">?</span>
+              </label>
+              <input id="m_target" class="form-control" type="number" step="1" value="10000" min="0">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">
+                Upper Bound ($)
+                <span class="info-icon" data-bs-toggle="popover" data-bs-trigger="click" data-bs-content="Maximum cash limit (not actively used in classic Miller–Orr, but helps define bounds). Usually set to 2–3× lower bound.">?</span>
+              </label>
+              <input id="m_upper" class="form-control" type="number" step="1" value="20000" min="0">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end mt-3">
+            <button id="runBtn" class="btn btn-primary">Run Simulation</button>
+          </div>
+        </div>
+        
+        <div class="card p-3 mb-3">
+          <h5 class="text-info">Summary</h5>
+          <div id="summaryArea" class="row"></div>
+        </div>
+        <div id="chart" class="card p-3 mb-3">
+          <div id="plotlyChart" style="width:100%;height:420px"></div>
+        </div>
+
+        <div class="card p-3 mb-3">
+          <h5 class="text-info mb-3">Cash Flow & Events Timeline</h5>
+          <div id="eventChart" style="width:100%;height:420px;"></div>
+        </div>
+
+
+        <div class="card p-3 mb-3">
+          <h5 class="text-info">Cost Breakdown Comparison</h5>
+          <div class="row">
+            <div class="col-md-7"><div id="costBarChart" style="height:420px;"></div></div>
+            <div class="col-md-5">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <small class="text-info">Pie View</small>
+                <select id="pieModelSelect" class="form-select form-select-sm w-auto">
+                  <option value="pso" selected>PSO</option>
+                  <option value="ga">GA</option> 
+                  <option value="abc">ABC</option> 
+                  <option value="miller">Miller–Orr</option>
+                </select>
+              </div>
+              <div id="costDonut" class="d-flex justify-content-center align-items-center" style="height:420px; width:100%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3">
+        <div class="card p-3 mb-3">
+          <h6 class="text-info">Quick actions</h6>
+          <button id="downloadMiller" class="btn btn-outline-light w-100 mb-2">Download Miller CSV</button>
+          <button id="downloadPSO" class="btn btn-outline-light w-100 mb-2">Download PSO CSV</button>
+          <button id="downloadGA" class="btn btn-outline-light w-100 mb-2">Download GA CSV</button> 
+          <button id="downloadABC" class="btn btn-outline-light w-100 mb-2">Download ABC CSV</button>
+          
+          <button id="psoAnimateBtn" class="btn btn-primary w-100 mt-3">✨ Animate PSO Search</button>
+          </div>
+
+        <div class="card p-3">
+          <h6 class="text-info">Notes</h6>
+          <p class="small-muted">Use the sliders/inputs to tweak optimization parameters. Larger population/iter values mean longer server run but more reliable results.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="animModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-info">PSO Optimization Visualization</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <div id="animLoading" class="d-none">
+            <div class="spinner-border text-info" role="status"></div>
+            <p class="mt-2">Generating Animation... (This takes a few seconds)</p>
+          </div>
+          <img id="animImage" src="" class="img-fluid d-none" style="border-radius: 8px;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quickSettingsCard" class="card shadow">
+    <div class="card-header bg-dark text-info py-2">
+      <h6 class="mb-0">Quick Settings</h6>
+    </div>
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <label for="s_presetSelect" class="form-label small-muted mb-0 me-2 d-inline">Preset:</label>
+        <select id="s_presetSelect" class="form-select form-select-sm" style="width: 150px;">
+          <option value="custom">Custom Settings</option>
+        </select>
+      </div>
+      <hr class="text-info my-2">
+      <small class="text-info d-block mb-1">Cost Parameters</small>
+      <div class="row g-1 mb-2">
+        <div class="col-6">
+          <label class="form-label">Oppo Rate</label>
+          <input id="q_oppo_rate" class="form-control" type="number" step="0.001">
+        </div>
+        <div class="col-6">
+          <label class="form-label">Refill Cost</label>
+          <input id="q_refill_cost" class="form-control" type="number" step="1">
+        </div>
+        <div class="col-6">
+          <label class="form-label">Fine</label>
+          <input id="q_shortage_fine" class="form-control" type="number" step="1">
+        </div>
+        <div class="col-6">
+          <label class="form-label">Lookahead</label>
+          <input id="q_lookahead" class="form-control" type="number" step="1">
+        </div>
+      </div>
+      
+      <small class="text-info d-block mb-1 mt-2">Heuristic Parameters</small>
+      <div class="row g-1">
+        <div class="col-6">
+          <label class="form-label">Population</label>
+          <input id="q_n_particles" class="form-control" type="number" step="1">
+        </div>
+        <div class="col-6">
+          <label class="form-label">Iterations</label>
+          <input id="q_iters" class="form-control" type="number" step="1">
+        </div>
+      </div>
+      <button id="q_sync_btn" class="btn btn-sm btn-primary w-100 mt-2">Sync & Run</button>
+    </div>
+  </div>
+
+<script>
+async function callSimulate(payload) {
+  const res = await fetch('/simulate', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+  const json = await res.json();
+  return json;
+}
+
+function showFloatingWarning(message) {
+  // Remove existing alert if any
+  const oldAlert = document.getElementById('floatingWarning');
+  if (oldAlert) oldAlert.remove();
+
+  const div = document.createElement('div');
+  div.id = 'floatingWarning';
+  div.className = 'position-fixed top-0 start-50 translate-middle-x mt-3 alert alert-warning shadow border-0';
+  div.style.zIndex = '2000';
+  div.innerHTML = `<strong>⚠️ Warning:</strong> ${message}`;
+
+  document.body.appendChild(div);
+
+  // Auto remove after 4s
+  setTimeout(() => div.remove(), 4000);
+}
+
+// Reworked renderSummary to include GA and ABC
+function renderSummary(m, p, g, a) {
+  
+  // Find the overall best model among PSO, GA, and ABC
+  const heuristicModels = [
+    { name: 'PSO', summary: p },
+    { name: 'GA', summary: g },
+    { name: 'ABC', summary: a }
+  ];
+  
+  // Find the model with the minimum total cost
+  const bestHeuristic = heuristicModels.reduce((best, current) => {
+    return current.summary.TotalCost < best.summary.TotalCost ? current : best;
+  });
+
+  const totalSaved = m.TotalCost - bestHeuristic.summary.TotalCost;
+  const pctSaved = (totalSaved / m.TotalCost) * 100;
+  
+  const html = `
+  <div class="col-12">
+    <table class="table table-sm table-borderless text-light align-middle">
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Total Cost</th>
+          <th>Avg Day</th>
+          <th># Refills</th>
+          <th>Avg Refill</th>
+          <th># Fines</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Miller–Orr</td>
+          <td>$${m.TotalCost.toLocaleString(undefined, {maximumFractionDigits:0})}</td>
+          <td>$${m.AvgDailyCost.toFixed(2)}</td>
+          <td>${m.NumberRefills}</td>
+          <td>$${m.AvgRefillAmount.toFixed(2)}</td>
+          <td>${m.NumberFines}</td>
+        </tr>
+        <tr>
+          <td><b>PSO</b></td>
+          <td>$${p.TotalCost.toLocaleString(undefined, {maximumFractionDigits:0})}</td>
+          <td>$${p.AvgDailyCost.toFixed(2)}</td>
+          <td>${p.NumberRefills}</td>
+          <td>$${p.AvgRefillAmount.toFixed(2)}</td>
+          <td>${p.NumberFines}</td>
+        </tr>
+        <tr>
+          <td><b>GA</b></td>
+          <td>$${g.TotalCost.toLocaleString(undefined, {maximumFractionDigits:0})}</td>
+          <td>$${g.AvgDailyCost.toFixed(2)}</td>
+          <td>${g.NumberRefills}</td>
+          <td>$${g.AvgRefillAmount.toFixed(2)}</td>
+          <td>${g.NumberFines}</td>
+        </tr>
+        <tr>
+          <td><b>ABC</b></td>
+          <td>$${a.TotalCost.toLocaleString(undefined, {maximumFractionDigits:0})}</td>
+          <td>$${a.AvgDailyCost.toFixed(2)}</td>
+          <td>${a.NumberRefills}</td>
+          <td>$${a.AvgRefillAmount.toFixed(2)}</td>
+          <td>${a.NumberFines}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-12 mt-3">
+    <h6 class="text-info">💡 Insights (vs Miller–Orr)</h6>
+    <ul class="list-unstyled small">
+      <li>🥇 <b>Best Heuristic:</b> <b>${bestHeuristic.name}</b> (Cost: $${bestHeuristic.summary.TotalCost.toLocaleString(undefined, {maximumFractionDigits:0})})</li>
+      <li>🔻 <b>Total cost reduction:</b> $${totalSaved.toLocaleString(undefined,{maximumFractionDigits:0})} (${pctSaved.toFixed(2)}%)</li>
+    </ul>
+    <p class="small-muted">
+      <b>PSO</b> params → α=${p.best_params ? p.best_params[0].toFixed(3) : 'n/a'}, threshold=${p.best_params ? Math.round(p.best_params[1]) : 'n/a'}<br>
+      <b>GA</b> params → α=${g.best_params ? g.best_params[0].toFixed(3) : 'n/a'}, threshold=${g.best_params ? Math.round(g.best_params[1]) : 'n/a'}<br>
+      <b>ABC</b> params → α=${a.best_params ? a.best_params[0].toFixed(3) : 'n/a'}, threshold=${a.best_params ? Math.round(a.best_params[1]) : 'n/a'}
+    </p>
+  </div>
+  `;
+
+  document.getElementById('summaryArea').innerHTML = html;
+}
+
+// Updated buildPlotly to include all three heuristics
+function buildPlotly(millerDaily, psoDaily, gaDaily, abcDaily) {
+  const days = millerDaily.Day;
+  const smooth = 7; // 7-day moving average for clarity
+
+  const smoothSeries = (arr) => {
+    const out = [];
+    for (let i=0; i<arr.length; i++) {
+      const start = Math.max(0, i - smooth);
+      const slice = arr.slice(start, i+1);
+      out.push(slice.reduce((a,b)=>a+b,0)/slice.length);
+    }
+    return out;
+  };
+
+  // Determine the model with the lowest cash balance average (best opportunity cost)
+  const avgP = psoDaily.CashBalance.reduce((a,b)=>a+b,0)/psoDaily.CashBalance.length;
+  const avgG = gaDaily.CashBalance.reduce((a,b)=>a+b,0)/gaDaily.CashBalance.length;
+  const avgA = abcDaily.CashBalance.reduce((a,b)=>a+b,0)/abcDaily.CashBalance.length;
+
+  let bestCashDaily = psoDaily.CashBalance;
+  let bestCashName = 'PSO';
+
+  if (avgG < avgP && avgG < avgA) {
+    bestCashDaily = gaDaily.CashBalance;
+    bestCashName = 'GA';
+  } else if (avgA < avgP && avgA < avgG) {
+    bestCashDaily = abcDaily.CashBalance;
+    bestCashName = 'ABC';
+  }
+  
+  const traceM = {
+    x: days,
+    y: smoothSeries(millerDaily.CashBalance),
+    name: 'Miller–Orr (7-day avg)',
+    fill: 'none',
+    mode: 'lines',
+    line: {color:'#f39c12', width:1.5}
+  };
+
+  const traceBest = {
+    x: days,
+    y: smoothSeries(bestCashDaily),
+    name: `${bestCashName} (7-day avg)`,
+    fill: 'tonexty',
+    mode: 'lines',
+    line: {color:'#1abc9c', width:2.5}
+  };
+
+ 
+  const layout = {
+    title:{text:`Average Cash Balance: ${bestCashName} vs Miller–Orr`},
+    paper_bgcolor:'#1f2833', plot_bgcolor:'#0b0c10',
+    font:{color:'#c5c6c7'},
+    yaxis:{title:'Cash ($)', tickformat:'.2s'},
+    xaxis:{title:'Day', rangeslider:{visible:true}},
+    legend:{orientation:'h', x:0.3, y:-0.2}
+  };
+  Plotly.react('plotlyChart', [traceM, traceBest], layout);
+}
+
+// Updated buildEventChart to focus on Miller-Orr vs Best Heuristic
+function buildEventChart(millerDaily, psoDaily, gaDaily, abcDaily, psoSummary, gaSummary, abcSummary) {
+  const days = millerDaily.Day;
+  
+  // Find the best heuristic based on TotalCost
+  const heuristicModels = [
+    { daily: psoDaily, summary: psoSummary, name: 'PSO', color: '#1abc9c', fineColor: '#c0392b', refillColor: '#27ae60' },
+    { daily: gaDaily, summary: gaSummary, name: 'GA', color: '#3498db', fineColor: '#9b59b6', refillColor: '#2980b9' },
+    { daily: abcDaily, summary: abcSummary, name: 'ABC', color: '#9b59b6', fineColor: '#e74c3c', refillColor: '#8e44ad' }
+  ];
+  
+  const bestHeuristic = heuristicModels.reduce((best, current) => {
+    return current.summary.TotalCost < best.summary.TotalCost ? current : best;
+  });
+
+
+  // --- Miller–Orr traces ---
+  const cashM = {
+    x: days,
+    y: millerDaily.CashBalance,
+    mode: 'lines',
+    name: 'Miller–Orr Cash',
+    line: { color: '#f39c12', width: 1.5 }
+  };
+
+  const refillM = {
+    x: days.filter((_, i) => millerDaily.RefillAmount[i] > 0),
+    y: millerDaily.CashBalance.filter((_, i) => millerDaily.RefillAmount[i] > 0),
+    mode: 'markers',
+    name: 'Miller–Orr Refills',
+    marker: { color: '#2ecc71', size: 8, symbol: 'circle' }
+  };
+
+  const finesM = {
+    x: days.filter((_, i) => millerDaily.FineCost[i] > 0),
+    y: millerDaily.CashBalance.filter((_, i) => millerDaily.FineCost[i] > 0),
+    mode: 'markers',
+    name: 'Miller–Orr Shortages',
+    marker: { color: '#e74c3c', size: 10, symbol: 'triangle-up' }
+  };
+
+  // --- Best Heuristic traces ---
+  const cashP = {
+    x: days,
+    y: bestHeuristic.daily.CashBalance,
+    mode: 'lines',
+    name: `${bestHeuristic.name} Cash`,
+    line: { color: bestHeuristic.color, width: 2.0 }
+  };
+
+  const refillP = {
+    x: days.filter((_, i) => bestHeuristic.daily.RefillAmount[i] > 0),
+    y: bestHeuristic.daily.CashBalance.filter((_, i) => bestHeuristic.daily.CashBalance[i] > 0),
+    mode: 'markers',
+    name: `${bestHeuristic.name} Refills`,
+    marker: { color: bestHeuristic.refillColor, size: 9, symbol: 'circle' }
+  };
+
+  const finesP = {
+    x: days.filter((_, i) => bestHeuristic.daily.FineCost[i] > 0),
+    y: bestHeuristic.daily.CashBalance.filter((_, i) => bestHeuristic.daily.FineCost[i] > 0),
+    mode: 'markers',
+    name: `${bestHeuristic.name} Shortages`,
+    marker: { color: bestHeuristic.fineColor, size: 11, symbol: 'triangle-up' }
+  };
+
+  // default to zoom in on days 0-30 (or full range if data shorter)
+  const maxDay = (Array.isArray(days) && days.length) ? Math.max(...days.map(Number)) : 0;
+  const rangeEnd = (maxDay >= 30) ? 30 : maxDay;
+
+  const layout = {
+    paper_bgcolor: '#1f2833',
+    plot_bgcolor: '#0b0c10',
+    font: { color: '#c5c6c7' },
+    title: { text: `Cash Level: ${bestHeuristic.name} vs Miller–Orr`, font: { color: '#66fcf1' } },
+    xaxis: { title: 'Day', rangeslider: { visible: true }, range: [0, Math.max(rangeEnd, 0)] },
+    yaxis: { title: 'Cash Balance ($)', tickformat: '.2s' },
+    // move legend to the right side, vertically stacked
+    legend: { orientation: 'v', x: 1.02, y: 1, xanchor: 'left' },
+    // give extra right margin so legend doesn't overlap the plot
+    margin: { t: 50, l: 60, r: 160, b: 60 }
+  };
+
+  Plotly.react('eventChart', [cashM, refillM, finesM, cashP, refillP, finesP], layout);
+}
+
+// ✅ FIXED buildCostCharts: correctly accesses .breakdown data
+function buildCostCharts(m, p, g, a) {
+    const labels = ['Opportunity Cost', 'Refill Cost', 'Fine Cost'];
+
+    // Helper to safely extract data (fallback to 0 if missing)
+    const getData = (model) => {
+        if (!model || !model.breakdown) return [0, 0, 0];
+        return [
+            model.breakdown.OpportunityCost, 
+            model.breakdown.RefillCost, 
+            model.breakdown.FineCost
+        ];
+    };
+
+    // --- Data for Bar Chart ---
+    const miller = getData(m);
+    const pso = getData(p);
+    const ga = getData(g);
+    const abc = getData(a);
+    
+    // Find the overall best model for bar chart comparison coloring
+    // (Simple heuristic: lowest total cost gets the 'best' color logic if needed)
+    
+    // --- Bar Chart Traces ---
+    const barData = [
+      { x: labels, y: miller, name: 'Miller–Orr', type: 'bar', marker: { color: '#f39c12' } },
+      { x: labels, y: pso, name: 'PSO', type: 'bar', marker: { color: '#1abc9c' } },
+      { x: labels, y: ga, name: 'GA', type: 'bar', marker: { color: '#3498db' } },
+      { x: labels, y: abc, name: 'ABC', type: 'bar', marker: { color: '#9b59b6' } }
+    ];
+
+    const barLayout = {
+      paper_bgcolor: '#1f2833', plot_bgcolor: '#0b0c10', font: { color: '#c5c6c7' },
+      barmode: 'group', title: { text: 'Cost Breakdown Comparison' },
+      yaxis: { tickformat: '.2s' }, margin: { t: 40, l: 50, r: 20, b: 40 }
+    };
+    
+    Plotly.react('costBarChart', barData, barLayout);
+
+    // --- Doughnut Charts Data Prep ---
+    // Calculate totals for percentage calculation
+    const sum = (arr) => arr.reduce((a, b) => a + b, 0) || 1;
+    const millerPie = [{ values: miller, labels: labels, hole: 0.4, type: 'pie', textinfo: 'label+percent', marker: { colors: ['#f1c40f', '#f39c12', '#d35400'] } }];
+    const psoPie = [{ values: pso, labels: labels, hole: 0.4, type: 'pie', textinfo: 'label+percent', marker: { colors: ['#16a085', '#1abc9c', '#148f77'] } }];
+    const gaPie = [{ values: ga, labels: labels, hole: 0.4, type: 'pie', textinfo: 'label+percent', marker: { colors: ['#2980b9', '#3498db', '#2c3e50'] } }];
+    const abcPie = [{ values: abc, labels: labels, hole: 0.4, type: 'pie', textinfo: 'label+percent', marker: { colors: ['#8e44ad', '#9b59b6', '#7f8c8d'] } }];
+
+    const pieDataMap = { 'pso': psoPie, 'ga': gaPie, 'abc': abcPie, 'miller': millerPie };
+    
+    const donutLayout = {
+      paper_bgcolor: '#1f2833', plot_bgcolor: '#1f2833',
+      title: { text: '% Cost Composition' }, font: { color: '#c5c6c7' },
+      showlegend: true, legend: { orientation: 'h'},
+      margin: { t: 40, l: 20, r: 20, b: 20 },
+      height: 420,
+      width: 360
+    };
+
+    // Render default (PSO)
+    const selectEl = document.getElementById('pieModelSelect');
+    // If the dropdown exists, use its current value, otherwise default to pso
+    const defaultModel = selectEl ? selectEl.value : 'pso';
+    
+    Plotly.react('costDonut', pieDataMap[defaultModel], donutLayout);
+
+    // Re-attach change handler to ensure it uses the fresh data
+    if (selectEl) {
+        // Clone node to strip old event listeners (prevent stacking)
+        const newSelect = selectEl.cloneNode(true);
+        selectEl.parentNode.replaceChild(newSelect, selectEl);
+        
+        newSelect.addEventListener('change', (e) => {
+            const v = e.target.value;
+            Plotly.react('costDonut', pieDataMap[v], donutLayout);
+        });
+    }
+}
+
+// Reworked renderSummary to include GA and ABC
+function renderSummary(m, p, g, a) {
+  
+  // Find the overall best model among PSO, GA, and ABC
+  const heuristicModels = [
+    { name: 'PSO', summary: p },
+    { name: 'GA', summary: g },
+    { name: 'ABC', summary: a }
+  ];
+  
+  // Find the model with the minimum total cost
+  const bestHeuristic = heuristicModels.reduce((best, current) => {
+    return current.summary.TotalCost < best.summary.TotalCost ? current : best;
+  });
+
+  const totalSaved = m.TotalCost - bestHeuristic.summary.TotalCost;
+  const pctSaved = (totalSaved / m.TotalCost) * 100;
+  
+  const html = `
+  <div class="col-12">
+    <table class="table table-sm table-borderless text-light align-middle">
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Total Cost</th>
+          <th>Avg Day</th>
+          <th># Refills</th>
+          <th>Avg Refill</th>
+          <th># Fines</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Miller–Orr</td>
+          <td>$${m.TotalCost.toLocaleString(undefined, {maximumFractionDigits:0})}</td>
+          <td>$${m.AvgDailyCost.toFixed(2)}</td>
+          <td>${m.NumberRefills}</td>
+          <td>$${m.AvgRefillAmount.toFixed(2)}</td>
+          <td>${m.NumberFines}</td>
+        </tr>
+        <tr>
+          <td><b>PSO</b></td>
+          <td>$${p.TotalCost.toLocaleString(undefined, {maximumFractionDigits:0})}</td>
+          <td>$${p.AvgDailyCost.toFixed(2)}</td>
+          <td>${p.NumberRefills}</td>
+          <td>$${p.AvgRefillAmount.toFixed(2)}</td>
+          <td>${p.NumberFines}</td>
+        </tr>
+        <tr>
+          <td><b>GA</b></td>
+          <td>$${g.TotalCost.toLocaleString(undefined, {maximumFractionDigits:0})}</td>
+          <td>$${g.AvgDailyCost.toFixed(2)}</td>
+          <td>${g.NumberRefills}</td>
+          <td>$${g.AvgRefillAmount.toFixed(2)}</td>
+          <td>${g.NumberFines}</td>
+        </tr>
+        <tr>
+          <td><b>ABC</b></td>
+          <td>$${a.TotalCost.toLocaleString(undefined, {maximumFractionDigits:0})}</td>
+          <td>$${a.AvgDailyCost.toFixed(2)}</td>
+          <td>${a.NumberRefills}</td>
+          <td>$${a.AvgRefillAmount.toFixed(2)}</td>
+          <td>${a.NumberFines}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-12 mt-3">
+    <h6 class="text-info">💡 Insights (vs Miller–Orr)</h6>
+    <ul class="list-unstyled small">
+      <li>🥇 <b>Best Heuristic:</b> <b>${bestHeuristic.name}</b> (Cost: $${bestHeuristic.summary.TotalCost.toLocaleString(undefined, {maximumFractionDigits:0})})</li>
+      <li>🔻 <b>Total cost reduction:</b> $${totalSaved.toLocaleString(undefined,{maximumFractionDigits:0})} (${pctSaved.toFixed(2)}%)</li>
+    </ul>
+    <p class="small-muted">
+      <b>PSO</b> params → α=${p.best_params ? p.best_params[0].toFixed(3) : 'n/a'}, threshold=${p.best_params ? Math.round(p.best_params[1]) : 'n/a'}<br>
+      <b>GA</b> params → α=${g.best_params ? g.best_params[0].toFixed(3) : 'n/a'}, threshold=${g.best_params ? Math.round(g.best_params[1]) : 'n/a'}<br>
+      <b>ABC</b> params → α=${a.best_params ? a.best_params[0].toFixed(3) : 'n/a'}, threshold=${a.best_params ? Math.round(a.best_params[1]) : 'n/a'}
+    </p>
+  </div>
+  `;
+
+  document.getElementById('summaryArea').innerHTML = html;
+}
+
+// Updated buildPlotly to include all three heuristics
+function buildPlotly(millerDaily, psoDaily, gaDaily, abcDaily) {
+  const days = millerDaily.Day;
+  const smooth = 7; // 7-day moving average for clarity
+
+  const smoothSeries = (arr) => {
+    const out = [];
+    for (let i=0; i<arr.length; i++) {
+      const start = Math.max(0, i - smooth);
+      const slice = arr.slice(start, i+1);
+      out.push(slice.reduce((a,b)=>a+b,0)/slice.length);
+    }
+    return out;
+  };
+
+  // Determine the model with the lowest cash balance average (best opportunity cost)
+  const avgP = psoDaily.CashBalance.reduce((a,b)=>a+b,0)/psoDaily.CashBalance.length;
+  const avgG = gaDaily.CashBalance.reduce((a,b)=>a+b,0)/gaDaily.CashBalance.length;
+  const avgA = abcDaily.CashBalance.reduce((a,b)=>a+b,0)/abcDaily.CashBalance.length;
+
+  let bestCashDaily = psoDaily.CashBalance;
+  let bestCashName = 'PSO';
+
+  if (avgG < avgP && avgG < avgA) {
+    bestCashDaily = gaDaily.CashBalance;
+    bestCashName = 'GA';
+  } else if (avgA < avgP && avgA < avgG) {
+    bestCashDaily = abcDaily.CashBalance;
+    bestCashName = 'ABC';
+  }
+  
+  const traceM = {
+    x: days,
+    y: smoothSeries(millerDaily.CashBalance),
+    name: 'Miller–Orr (7-day avg)',
+    fill: 'none',
+    mode: 'lines',
+    line: {color:'#f39c12', width:1.5}
+  };
+
+  const traceBest = {
+    x: days,
+    y: smoothSeries(bestCashDaily),
+    name: `${bestCashName} (7-day avg)`,
+    fill: 'tonexty',
+    mode: 'lines',
+    line: {color:'#1abc9c', width:2.5}
+  };
+
+ 
+  const layout = {
+    title:{text:`Average Cash Balance: ${bestCashName} vs Miller–Orr`},
+    paper_bgcolor:'#1f2833', plot_bgcolor:'#0b0c10',
+    font:{color:'#c5c6c7'},
+    yaxis:{title:'Cash ($)', tickformat:'.2s'},
+    xaxis:{title:'Day', rangeslider:{visible:true}},
+    legend:{orientation:'h', x:0.3, y:-0.2}
+  };
+  Plotly.react('plotlyChart', [traceM, traceBest], layout);
+}
+
+// Updated buildEventChart to focus on Miller-Orr vs Best Heuristic
+function buildEventChart(millerDaily, psoDaily, gaDaily, abcDaily, psoSummary, gaSummary, abcSummary) {
+  const days = millerDaily.Day;
+  
+  // Find the best heuristic based on TotalCost
+  const heuristicModels = [
+    { daily: psoDaily, summary: psoSummary, name: 'PSO', color: '#1abc9c', fineColor: '#c0392b', refillColor: '#27ae60' },
+    { daily: gaDaily, summary: gaSummary, name: 'GA', color: '#3498db', fineColor: '#9b59b6', refillColor: '#2980b9' },
+    { daily: abcDaily, summary: abcSummary, name: 'ABC', color: '#9b59b6', fineColor: '#e74c3c', refillColor: '#8e44ad' }
+  ];
+  
+  const bestHeuristic = heuristicModels.reduce((best, current) => {
+    return current.summary.TotalCost < best.summary.TotalCost ? current : best;
+  });
+
+
+  // --- Miller–Orr traces ---
+  const cashM = {
+    x: days,
+    y: millerDaily.CashBalance,
+    mode: 'lines',
+    name: 'Miller–Orr Cash',
+    line: { color: '#f39c12', width: 1.5 }
+  };
+
+  const refillM = {
+    x: days.filter((_, i) => millerDaily.RefillAmount[i] > 0),
+    y: millerDaily.CashBalance.filter((_, i) => millerDaily.RefillAmount[i] > 0),
+    mode: 'markers',
+    name: 'Miller–Orr Refills',
+    marker: { color: '#2ecc71', size: 8, symbol: 'circle' }
+  };
+
+  const finesM = {
+    x: days.filter((_, i) => millerDaily.FineCost[i] > 0),
+    y: millerDaily.CashBalance.filter((_, i) => millerDaily.FineCost[i] > 0),
+    mode: 'markers',
+    name: 'Miller–Orr Shortages',
+    marker: { color: '#e74c3c', size: 10, symbol: 'triangle-up' }
+  };
+
+  // --- Best Heuristic traces ---
+  const cashP = {
+    x: days,
+    y: bestHeuristic.daily.CashBalance,
+    mode: 'lines',
+    name: `${bestHeuristic.name} Cash`,
+    line: { color: bestHeuristic.color, width: 2.0 }
+  };
+
+  const refillP = {
+    x: days.filter((_, i) => bestHeuristic.daily.RefillAmount[i] > 0),
+    y: bestHeuristic.daily.CashBalance.filter((_, i) => bestHeuristic.daily.CashBalance[i] > 0),
+    mode: 'markers',
+    name: `${bestHeuristic.name} Refills`,
+    marker: { color: bestHeuristic.refillColor, size: 9, symbol: 'circle' }
+  };
+
+  const finesP = {
+    x: days.filter((_, i) => bestHeuristic.daily.FineCost[i] > 0),
+    y: bestHeuristic.daily.CashBalance.filter((_, i) => bestHeuristic.daily.FineCost[i] > 0),
+    mode: 'markers',
+    name: `${bestHeuristic.name} Shortages`,
+    marker: { color: bestHeuristic.fineColor, size: 11, symbol: 'triangle-up' }
+  };
+
+  // default to zoom in on days 0-30 (or full range if data shorter)
+  const maxDay = (Array.isArray(days) && days.length) ? Math.max(...days.map(Number)) : 0;
+  const rangeEnd = (maxDay >= 30) ? 30 : maxDay;
+
+  const layout = {
+    paper_bgcolor: '#1f2833',
+    plot_bgcolor: '#0b0c10',
+    font: { color: '#c5c6c7' },
+    title: { text: `Cash Level: ${bestHeuristic.name} vs Miller–Orr`, font: { color: '#66fcf1' } },
+    xaxis: { title: 'Day', rangeslider: { visible: true }, range: [0, Math.max(rangeEnd, 0)] },
+    yaxis: { title: 'Cash Balance ($)', tickformat: '.2s' },
+    // move legend to the right side, vertically stacked
+    legend: { orientation: 'v', x: 1.02, y: 1, xanchor: 'left' },
+    // give extra right margin so legend doesn't overlap the plot
+    margin: { t: 50, l: 60, r: 160, b: 60 }
+  };
+
+  Plotly.react('eventChart', [cashM, refillM, finesM, cashP, refillP, finesP], layout);
+}
+
+
+
+// START: New function for PSO Animation
+async function generateAnimation() {
+  const n_particles = parseInt(document.getElementById('n_particles').value) || 50;
+  const max_iter = parseInt(document.getElementById('iters').value) || 20;
+  const smoothing = 10; // Fixed smoothing steps per iteration
+
+  const animationUrl = `/animate_pso?n_particles=${n_particles}&max_iter=${max_iter}&smoothing=${smoothing}`;
+  
+  // Open in a new tab/window
+  const newWindow = window.open(animationUrl, '_blank');
+  
+  if (newWindow) {
+    newWindow.focus();
+  } else {
+    showFloatingWarning("Pop-up blocked! Please allow pop-ups for this site to view the animation.");
+  }
+}
+// END: New function for PSO Animation
+
+// START: FIXED ANIMATION LOGIC (Modal Popup)
+document.getElementById('psoAnimateBtn').addEventListener('click', async () => {
+    const modalElement = document.getElementById('animModal');
+    const modal = new bootstrap.Modal(modalElement);
+    const loading = document.getElementById('animLoading');
+    const img = document.getElementById('animImage');
+    
+    // 1. Reset and Show Loading State
+    img.classList.add('d-none');
+    img.src = '';
+    loading.classList.remove('d-none');
+    modal.show();
+
+    try {
+        // 2. Fetch the GIF from the backend
+        const res = await fetch('/animate_pso');
+        if (!res.ok) throw new Error(`Server returned status ${res.status}`);
+        
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        
+        // 3. Update Modal content
+        img.onload = () => {
+            // Revoke the temporary URL once the image has loaded
+            URL.revokeObjectURL(url); 
+        };
+        img.src = url;
+        loading.classList.add('d-none');
+        img.classList.remove('d-none');
+
+    } catch (e) {
+        console.error("Animation Error:", e);
+        // Display error message inside the loading area
+        loading.innerHTML = `<p class="text-danger">Error generating animation: ${e.message}</p>`;
+        loading.classList.remove('d-none');
+        img.classList.add('d-none');
+    }
+});
+// END: FIXED ANIMATION LOGIC (Modal Popup)
+
+document.getElementById('runBtn').addEventListener('click', async () => {
+        const btn = document.getElementById('runBtn');
+        btn.innerText = "Running...";
+        btn.disabled = true;
+        document.getElementById('loaderOverlay').classList.remove('d-none');
+        
+        const payload = {
+            oppo_rate: parseFloat(document.getElementById('oppo_rate').value),
+            refill_cost: parseFloat(document.getElementById('refill_cost').value),
+            shortage_fine: parseFloat(document.getElementById('shortage_fine').value),
+            lookahead: parseInt(document.getElementById('lookahead').value),
+            n_particles: parseInt(document.getElementById('n_particles').value),
+            iters: parseInt(document.getElementById('iters').value),
+            alpha_bound: parseFloat(document.getElementById('alpha_bound').value),
+            threshold_mult: parseFloat(document.getElementById('threshold_mult').value),
+        };
+
+        const mAuto = document.getElementById('m_auto').checked;
+        if (!mAuto) {
+            payload.m_lower = parseFloat(document.getElementById('m_lower').value);
+            payload.m_upper = parseFloat(document.getElementById('m_upper').value);
+            payload.m_target = parseFloat(document.getElementById('m_target').value);
+        }
+
+        try {
+            const res = await fetch('/simulate', { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload) 
+            });
+            const data = await res.json();
+            
+            // 1. Render Summary Table
+            // (Data is already in the correct structure from Python, no manual assignment needed!)
+            renderSummary(data.miller.summary, data.pso.summary, data.ga.summary, data.abc.summary);
+
+            // 2. Render Main Chart
+            buildPlotly(data.miller.daily, data.pso.daily, data.ga.daily, data.abc.daily);
+
+            // 3. Render Cost Breakdown Charts
+            buildCostCharts(data.miller.summary, data.pso.summary, data.ga.summary, data.abc.summary);
+
+            // 4. Render Event Timeline
+            buildEventChart(data.miller.daily, data.pso.daily, data.ga.daily, data.abc.daily, 
+                            data.pso.summary, data.ga.summary, data.abc.summary);
+            
+            // Sync quick settings card
+            if (typeof syncMainToQuick === 'function') syncMainToQuick();
+
+        } catch (e) {
+            alert("Simulation failed: " + e.message);
+            console.error(e);
+        } finally {
+            btn.innerText = "Run Simulation";
+            btn.disabled = false;
+            document.getElementById('loaderOverlay').classList.add('d-none');
+        }
+    });
+
+
+// Toggle disable state of Miller–Orr inputs based on auto checkbox
+// --- Prevent unintended toggle for Miller–Orr Auto Bounds ---
+const mAuto = document.getElementById('m_auto');
+const mLabel = document.querySelector('label[for="m_auto"]');
+
+// Disable label text click
+mLabel.addEventListener('click', (e) => e.preventDefault());
+
+// Stop propagation for its info icon (so it doesn’t toggle checkbox)
+mLabel.querySelectorAll('.info-icon').forEach(icon => {
+  icon.addEventListener('click', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  });
+});
+
+// Normal enable/disable behavior
+mAuto.addEventListener('change', (e) => {
+  const disabled = e.target.checked;
+  ['m_lower','m_upper','m_target'].forEach(id => {
+    document.getElementById(id).disabled = disabled;
+  });
+});
+
+
+
+// initialize disabled state
+(() => {
+  const checked = document.getElementById('m_auto').checked;
+  document.getElementById('m_lower').disabled = checked;
+  document.getElementById('m_upper').disabled = checked;
+  document.getElementById('m_target').disabled = checked;
+})();
+
+async function downloadSimulation(which) {
+  const payload = {
+    oppo_rate: parseFloat(document.getElementById('oppo_rate').value),
+    refill_cost: parseFloat(document.getElementById('refill_cost').value),
+    shortage_fine: parseFloat(document.getElementById('shortage_fine').value),
+    lookahead: parseInt(document.getElementById('lookahead').value),
+    n_particles: parseInt(document.getElementById('n_particles').value),
+    iters: parseInt(document.getElementById('iters').value),
+    alpha_bound: parseFloat(document.getElementById('alpha_bound').value),
+    threshold_mult: parseFloat(document.getElementById('threshold_mult').value),
+  };
+
+  // Add Miller–Orr params only if auto bounds is OFF
+  if (!document.getElementById('m_auto').checked) {
+    payload.m_lower = parseFloat(document.getElementById('m_lower').value);
+    payload.m_upper = parseFloat(document.getElementById('m_upper').value);
+    payload.m_target = parseFloat(document.getElementById('m_target').value);
+  }
+
+  const res = await fetch(`/download/${which}`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  });
+
+  // Trigger browser download
+  const blob = await res.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${which}_simulation.csv`;
+  a.click();
+  window.URL.revokeObjectURL(url);
+}
+
+document.getElementById('downloadMiller').addEventListener('click', () => downloadSimulation('miller'));
+document.getElementById('downloadPSO').addEventListener('click', () => downloadSimulation('pso'));
+document.getElementById('downloadGA').addEventListener('click', () => downloadSimulation('ga')); // GA download
+document.getElementById('downloadABC').addEventListener('click', () => downloadSimulation('abc')); // ABC download
+
+
+
+// START: QUICK SETTINGS LOGIC & PRESETS
+const mainSettingsContainer = document.getElementById('mainSettingsContainer');
+const quickSettingsCard = document.getElementById('quickSettingsCard');
+
+const inputMap = [
+    { main: 'oppo_rate', quick: 'q_oppo_rate' },
+    { main: 'refill_cost', quick: 'q_refill_cost' },
+    { main: 'shortage_fine', quick: 'q_shortage_fine' },
+    { main: 'lookahead', quick: 'q_lookahead' },
+    { main: 'n_particles', quick: 'q_n_particles' },
+    { main: 'iters', quick: 'q_iters' },
+    { main: 'alpha_bound', quick: 'q_alpha_bound' },
+    { main: 'threshold_mult', quick: 'q_threshold_mult' },
+    { main: 'm_lower', quick: 'q_m_lower' },
+    { main: 'm_target', quick: 'q_m_target' },
+    { main: 'm_upper', quick: 'q_m_upper' },
+    { main: 'm_auto', quick: 'q_m_auto' }
+];
+
+const PRESETS = {
+    'default': {
+        name: 'Default',
+        oppo_rate: 0.01, refill_cost: 1000, shortage_fine: 10000, lookahead: 2,
+        n_particles: 30, iters: 40, alpha_bound: 3.0, threshold_mult: 1.5,
+        m_auto: true, m_lower: 5000, m_target: 10000, m_upper: 20000
+    },
+    'conservative': {
+        name: 'Conservative (Low Risk)',
+        oppo_rate: 0.005, refill_cost: 800, shortage_fine: 50000, lookahead: 3,
+        n_particles: 50, iters: 60, alpha_bound: 2.0, threshold_mult: 1.2,
+        m_auto: false, m_lower: 8000, m_target: 15000, m_upper: 25000
+    },
+    'aggressive': {
+        name: 'Aggressive (High Return)',
+        oppo_rate: 0.03, refill_cost: 2000, shortage_fine: 5000, lookahead: 1,
+        n_particles: 20, iters: 30, alpha_bound: 5.0, threshold_mult: 2.5,
+        m_auto: true, m_lower: 3000, m_target: 8000, m_upper: 15000
+    }
+};
+
+/**
+ * Populates the preset dropdowns with options from the PRESETS object.
+ */
+function populatePresets() {
+    const mainSelect = document.getElementById('presetSelect');
+    const stickySelect = document.getElementById('s_presetSelect');
+
+    for (const key in PRESETS) {
+        if (PRESETS.hasOwnProperty(key)) {
+            const preset = PRESETS[key];
+            const optionMain = new Option(preset.name, key);
+            const optionSticky = new Option(preset.name, key);
+            mainSelect.add(optionMain);
+            stickySelect.add(optionSticky);
+        }
+    }
+}
+
+/**
+ * Loads a selected preset's values into the main form fields.
+ * @param {string} presetName - The key of the preset to load.
+ */
+function loadPreset(presetName) {
+    if (presetName === 'custom') {
+        // Do nothing if Custom Settings is selected
+        document.getElementById('presetSelect').value = 'custom';
+        document.getElementById('s_presetSelect').value = 'custom';
+        return;
+    }
+
+    const p = PRESETS[presetName];
+    if (!p) return;
+
+    // Apply all settings from the preset to the main form
+    document.getElementById('oppo_rate').value = p.oppo_rate;
+    document.getElementById('refill_cost').value = p.refill_cost;
+    document.getElementById('shortage_fine').value = p.shortage_fine;
+    document.getElementById('lookahead').value = p.lookahead;
+    document.getElementById('n_particles').value = p.n_particles;
+    document.getElementById('iters').value = p.iters;
+    document.getElementById('alpha_bound').value = p.alpha_bound;
+    document.getElementById('threshold_mult').value = p.threshold_mult;
+    
+    // Miller-Orr settings (handle checkbox)
+    document.getElementById('m_auto').checked = p.m_auto;
+    document.getElementById('m_lower').value = p.m_lower;
+    document.getElementById('m_target').value = p.m_target;
+    document.getElementById('m_upper').value = p.m_upper;
+
+    // Set the dropdowns to the selected preset and mark as synchronized
+    document.getElementById('presetSelect').value = presetName;
+    document.getElementById('s_presetSelect').value = presetName;
+
+    // Trigger the change handler to update disabled state on Miller-Orr fields
+    document.getElementById('m_auto').dispatchEvent(new Event('change'));
+
+    // Sync the updated main settings to the sticky panel
+    syncMainToQuick();
+}
+
+/**
+ * Syncs the main settings to the quick settings card.
+ */
+function syncMainToQuick() {
+    inputMap.forEach(pair => {
+        const mainEl = document.getElementById(pair.main);
+        const quickEl = document.getElementById(pair.quick);
+        if (mainEl && quickEl) {
+            if (mainEl.type === 'checkbox') {
+                quickEl.checked = mainEl.checked;
+            } else {
+                quickEl.value = mainEl.value;
+            }
+        }
+    });
+    // Also sync the preset selectors
+    const presetMain = document.getElementById('presetSelect');
+    const presetQuick = document.getElementById('s_presetSelect');
+    if (presetMain && presetQuick) {
+        presetQuick.value = presetMain.value;
+    }
+}
+
+/**
+ * Syncs the quick settings to the main settings card (and clears preset selection).
+ */
+function syncQuickToMain() {
+    inputMap.forEach(pair => {
+        const mainEl = document.getElementById(pair.main);
+        const quickEl = document.getElementById(pair.quick);
+        if (mainEl && quickEl) {
+            if (mainEl.type === 'checkbox') {
+                mainEl.checked = quickEl.checked;
+            } else {
+                mainEl.value = quickEl.value;
+            }
+        }
+    });
+    // Sync preset selector from sticky to main
+    const presetQuick = document.getElementById('s_presetSelect');
+    const presetMain = document.getElementById('presetSelect');
+    if (presetQuick && presetMain) {
+        presetMain.value = presetQuick.value;
+    }
+    // Ensure Miller-Orr disabled state is correct after sync
+    document.getElementById('m_auto').dispatchEvent(new Event('change'));
+}
+
+
+// --- RUNTIME SETUP ---
+
+// Main settings card input listeners: sync to quick panel
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Populate presets
+    populatePresets();
+
+    // 2. Load the 'default' preset on initial load
+    loadPreset('default'); 
+
+    // 3. Set up event listeners for synchronization
+    inputMap.forEach(pair => {
+        const main = document.getElementById(pair.main);
+        if (main) {
+            main.addEventListener('input', () => {
+                syncMainToQuick();
+                // If any value is manually changed, set preset to 'custom'
+                if (main.id !== 'presetSelect') {
+                    document.getElementById('presetSelect').value = 'custom';
+                    document.getElementById('s_presetSelect').value = 'custom';
+                }
+            });
+            // Handle change event for select/checkboxes
+            main.addEventListener('change', syncMainToQuick);
+        }
+        
+        const quick = document.getElementById(pair.quick);
+        if (quick) {
+             // Quick panel changes should update main panel
+            quick.addEventListener('input', syncQuickToMain);
+            quick.addEventListener('change', syncQuickToMain);
+        }
+    });
+    
+    // Preset Selectors
+    document.getElementById('presetSelect').addEventListener('change', (e) => {
+        loadPreset(e.target.value);
+    });
+    document.getElementById('s_presetSelect').addEventListener('change', (e) => {
+        loadPreset(e.target.value);
+    });
+
+    // Scroll Logic: Show card when the main settings panel scrolls out of the viewport
+    window.addEventListener('scroll', () => {
+        if (!mainSettingsContainer) return;
+        const rect = mainSettingsContainer.getBoundingClientRect();
+        if (rect.bottom < 120) {
+            quickSettingsCard.classList.add('show');
+        } else {
+            quickSettingsCard.classList.remove('show');
+        }
+    });
+
+    // Sync & Run button listener on the quick card
+    document.getElementById('q_sync_btn').addEventListener('click', () => {
+        syncQuickToMain(); // Update main form inputs
+        document.getElementById('runBtn').click(); // Trigger the main simulation
+    });
+    
+    // Toggle disable state of Miller–Orr inputs based on auto checkbox
+    const mAuto = document.getElementById('m_auto');
+    mAuto.addEventListener('change', (e) => {
+        const disabled = e.target.checked;
+        ['m_lower','m_upper','m_target'].forEach(id => {
+            document.getElementById(id).disabled = disabled;
+        });
+        syncMainToQuick();
+    });
+
+    // Initialize disabled state for Miller-Orr inputs
+    const checked = document.getElementById('m_auto').checked;
+    document.getElementById('m_lower').disabled = checked;
+    document.getElementById('m_upper').disabled = checked;
+    document.getElementById('m_target').disabled = checked;
+});
+
+// ... (Rest of your script: downloadSimulation, run button listener, popover initialization, etc.)
+// END: QUICK SETTINGS LOGIC & PRESETS
+
+// Initialize all popovers
+document.addEventListener('DOMContentLoaded', () => {
+  const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+  let currentPopover = null;
+  
+  popoverTriggerList.map(triggerEl => {
+    const popover = new bootstrap.Popover(triggerEl, {
+      placement: 'top',
+      trigger: 'click'
+    });
+    
+    // Close previous popover when opening a new one
+    triggerEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentPopover && currentPopover !== triggerEl) {
+        const oldPopover = bootstrap.Popover.getInstance(currentPopover);
+        if (oldPopover) oldPopover.hide();
+      }
+      currentPopover = triggerEl;
+    });
+  });
+  
+  // Close popovers when clicking elsewhere
+  document.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('info-icon')) {
+      popoverTriggerList.forEach(el => {
+        const popover = bootstrap.Popover.getInstance(el);
+        if (popover) popover.hide();
+      });
+      currentPopover = null;
+    }
+  });
+});
+</script>
+
+</body>
+</html>
