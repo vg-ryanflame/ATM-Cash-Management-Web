@@ -1,0 +1,38 @@
+2025-11-21 11:09:33,879 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.16.133.56:5000
+2025-11-21 11:09:33,881 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-21 11:09:33,883 - werkzeug - INFO -  * Restarting with stat
+2025-11-21 11:09:38,740 - werkzeug - WARNING -  * Debugger is active!
+2025-11-21 11:09:38,744 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-21 11:09:39,249 - werkzeug - INFO - 172.16.133.56 - - [21/Nov/2025 11:09:39] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-11-21 11:09:39,341 - werkzeug - INFO - 172.16.133.56 - - [21/Nov/2025 11:09:39] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-11-21 11:09:39,355 - werkzeug - INFO - 172.16.133.56 - - [21/Nov/2025 11:09:39] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-11-21 11:09:40,267 - werkzeug - INFO - 172.16.133.56 - - [21/Nov/2025 11:09:40] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-11-21 11:09:51,620 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:09:51] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-11-21 11:09:51,637 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:09:51] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-11-21 11:09:51,638 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:09:51] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-11-21 11:09:51,881 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:09:51] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=Z8A1AMZVAU6TKQjw8LUN HTTP/1.1" 200 -
+2025-11-21 11:09:52,750 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:09:52] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-11-21 11:14:41,775 - werkzeug - INFO -  * Detected change in 'C:\\Users\\ryang\\Downloads\\BFIN WS2025\\ATM-Cash-Management-Web\\app.py', reloading
+2025-11-21 11:14:42,121 - werkzeug - INFO -  * Restarting with stat
+2025-11-21 11:15:14,317 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.16.133.56:5000
+2025-11-21 11:15:14,318 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-21 11:15:14,320 - werkzeug - INFO -  * Restarting with stat
+2025-11-21 11:15:19,125 - werkzeug - WARNING -  * Debugger is active!
+2025-11-21 11:15:19,138 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-21 11:15:19,597 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:15:19] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-11-21 11:15:19,697 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:15:19] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-11-21 11:15:19,699 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:15:19] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-11-21 11:15:19,736 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:15:19] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=rp2QZ0p5mPkt1tFdvS8M HTTP/1.1" 200 -
+2025-11-21 11:21:46,017 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:21:46] "GET / HTTP/1.1" 200 -
+2025-11-21 11:21:48,571 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:21:48] "POST /simulate HTTP/1.1" 200 -
+2025-11-21 11:22:02,185 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:22:02] "POST /simulate HTTP/1.1" 200 -
+2025-11-21 11:22:12,350 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:22:12] "POST /simulate HTTP/1.1" 200 -
+2025-11-21 11:22:13,966 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:22:13] "POST /simulate HTTP/1.1" 200 -
+2025-11-21 11:22:14,953 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:22:14] "POST /simulate HTTP/1.1" 200 -
+2025-11-21 11:22:16,541 - werkzeug - INFO - 127.0.0.1 - - [21/Nov/2025 11:22:16] "POST /simulate HTTP/1.1" 200 -

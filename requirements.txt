@@ -1,0 +1,10 @@
+Flask
+numpy
+pandas
+pyswarms
+deap
+numba
+scipy
+matplotlib
+Pillow
+gunicorn

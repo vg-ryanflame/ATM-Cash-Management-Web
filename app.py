@@ -322,7 +322,7 @@ def create_pso_animation_file(n_particles, max_iter):
 
 @app.route("/")
 def index():
-    return render_template("index-main.html")
+    return render_template("index.html")
 
 @app.route("/simulate", methods=["POST"])
 def simulate():
