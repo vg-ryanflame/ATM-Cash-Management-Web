@@ -189,3 +189,54 @@
 2025-11-22 22:44:52,867 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:44:52] "GET / HTTP/1.1" 200 -
 2025-11-22 22:44:54,388 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
 2025-11-22 22:44:56,021 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:44:56] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:51:14,448 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:51:16,424 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:51:16] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:51:29,295 - werkzeug - INFO -  * Detected change in 'C:\\Users\\ryang\\Downloads\\BFIN WS2025\\ATM-Cash-Management-Web\\app.py', reloading
+2025-11-22 22:51:29,663 - werkzeug - INFO -  * Restarting with stat
+2025-11-22 22:51:34,741 - werkzeug - WARNING -  * Debugger is active!
+2025-11-22 22:51:34,741 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-22 22:51:35,190 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:51:35] "GET / HTTP/1.1" 200 -
+2025-11-22 22:51:37,677 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:51:41,109 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:51:41] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:51:56,539 - werkzeug - INFO -  * Detected change in 'C:\\Users\\ryang\\Downloads\\BFIN WS2025\\ATM-Cash-Management-Web\\app.py', reloading
+2025-11-22 22:51:56,867 - werkzeug - INFO -  * Restarting with stat
+2025-11-22 22:52:01,979 - werkzeug - WARNING -  * Debugger is active!
+2025-11-22 22:52:01,994 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-22 22:52:02,423 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:52:02] "GET / HTTP/1.1" 200 -
+2025-11-22 22:52:07,538 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:52:12,537 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:52:12] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:52:37,800 - werkzeug - INFO -  * Detected change in 'C:\\Users\\ryang\\Downloads\\BFIN WS2025\\ATM-Cash-Management-Web\\app.py', reloading
+2025-11-22 22:52:38,167 - werkzeug - INFO -  * Restarting with stat
+2025-11-22 22:52:42,924 - werkzeug - WARNING -  * Debugger is active!
+2025-11-22 22:52:42,924 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-22 22:52:43,359 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:52:43] "GET / HTTP/1.1" 200 -
+2025-11-22 22:52:44,913 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:52:50,128 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:52:50] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:53:33,705 - werkzeug - INFO -  * Detected change in 'C:\\Users\\ryang\\Downloads\\BFIN WS2025\\ATM-Cash-Management-Web\\app.py', reloading
+2025-11-22 22:53:34,071 - werkzeug - INFO -  * Restarting with stat
+2025-11-22 22:53:39,145 - werkzeug - WARNING -  * Debugger is active!
+2025-11-22 22:53:39,149 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-22 22:53:39,591 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:53:39] "GET / HTTP/1.1" 200 -
+2025-11-22 22:53:41,886 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:53:46,341 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:53:46] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:53:53,787 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:53:53] "GET / HTTP/1.1" 200 -
+2025-11-22 22:53:55,683 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:54:00,166 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:54:00] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:54:22,606 - werkzeug - INFO -  * Detected change in 'C:\\Users\\ryang\\Downloads\\BFIN WS2025\\ATM-Cash-Management-Web\\app.py', reloading
+2025-11-22 22:54:22,963 - werkzeug - INFO -  * Restarting with stat
+2025-11-22 22:54:28,007 - werkzeug - WARNING -  * Debugger is active!
+2025-11-22 22:54:28,011 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-22 22:54:28,451 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:54:28] "GET / HTTP/1.1" 200 -
+2025-11-22 22:54:29,727 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:54:33,226 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:54:33] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:55:00,037 - werkzeug - INFO -  * Detected change in 'C:\\Users\\ryang\\Downloads\\BFIN WS2025\\ATM-Cash-Management-Web\\app.py', reloading
+2025-11-22 22:55:00,405 - werkzeug - INFO -  * Restarting with stat
+2025-11-22 22:55:05,432 - werkzeug - WARNING -  * Debugger is active!
+2025-11-22 22:55:05,432 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-22 22:55:05,900 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:55:05] "GET / HTTP/1.1" 200 -
+2025-11-22 22:55:08,903 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:55:12,352 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:55:12] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:55:54,668 - werkzeug - INFO -  * Detected change in 'C:\\Users\\ryang\\Downloads\\BFIN WS2025\\ATM-Cash-Management-Web\\app.py', reloading
+2025-11-22 22:55:55,028 - werkzeug - INFO -  * Restarting with stat
+2025-11-22 22:56:00,171 - werkzeug - WARNING -  * Debugger is active!
+2025-11-22 22:56:00,190 - werkzeug - INFO -  * Debugger PIN: 141-755-670
