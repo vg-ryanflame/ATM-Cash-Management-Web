@@ -304,14 +304,14 @@ def create_pso_animation_file(n_particles, max_iter):
         return scatter3D, scatter2D
 
     # OPTIMIZATION: Interval 30ms (Fast playback)
-    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=80, blit=False)
+    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=100, blit=False)
     
     f = tempfile.NamedTemporaryFile(suffix='.gif', delete=False)
     fname = f.name
     f.close()
     try: 
         # OPTIMIZATION: Low DPI (40) = Fast Saving
-        anim.save(fname, writer='pillow', fps=7, dpi=60)
+        anim.save(fname, writer='pillow', fps=5, dpi=60)
     except Exception as e: 
         os.remove(fname)
         raise e
@@ -400,7 +400,7 @@ def animate_pso():
     try:
         # Generate GIF to a temp file with aggressively reduced parameters
         # We ignore the user params here for speed, forcing a fast preset
-        gif_path = create_pso_animation_file(n_particles=17, max_iter=20)
+        gif_path = create_pso_animation_file(n_particles=12, max_iter=15)
         return send_file(gif_path, mimetype='image/gif')
     except Exception as e:
         return jsonify({"error": str(e)}), 500

@@ -152,3 +152,23 @@
 2025-11-22 22:21:01,780 - werkzeug - INFO -  * Restarting with stat
 2025-11-22 22:21:06,899 - werkzeug - WARNING -  * Debugger is active!
 2025-11-22 22:21:06,903 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-22 22:28:18,347 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:28:23,189 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:28:23] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:29:22,525 - werkzeug - INFO -  * Detected change in 'C:\\Users\\ryang\\Downloads\\BFIN WS2025\\ATM-Cash-Management-Web\\app.py', reloading
+2025-11-22 22:29:22,863 - werkzeug - INFO -  * Restarting with stat
+2025-11-22 22:29:27,945 - werkzeug - WARNING -  * Debugger is active!
+2025-11-22 22:29:27,947 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-22 22:29:28,381 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:29:28] "GET / HTTP/1.1" 200 -
+2025-11-22 22:29:31,832 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:29:35,498 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:29:35] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:29:58,711 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:30:02,527 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:30:02] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:30:19,408 - werkzeug - INFO -  * Detected change in 'C:\\Users\\ryang\\Downloads\\BFIN WS2025\\ATM-Cash-Management-Web\\app.py', reloading
+2025-11-22 22:30:19,749 - werkzeug - INFO -  * Restarting with stat
+2025-11-22 22:30:24,795 - werkzeug - WARNING -  * Debugger is active!
+2025-11-22 22:30:24,795 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-22 22:30:25,247 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:30:25] "GET / HTTP/1.1" 200 -
+2025-11-22 22:30:32,688 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:30:36,487 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:30:36] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:30:54,520 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:30:58,369 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:30:58] "GET /animate_pso HTTP/1.1" 200 -
