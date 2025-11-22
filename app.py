@@ -269,7 +269,7 @@ def create_pso_animation_file(n_particles, max_iter):
     ax2D = fig.add_subplot(122)
     
     # OPTIMIZATION: Reduced grid density (25 vs 60)
-    X, Y = np.meshgrid(np.linspace(BOUNDS[0], BOUNDS[1], 19), np.linspace(BOUNDS[0], BOUNDS[1], 19))
+    X, Y = np.meshgrid(np.linspace(BOUNDS[0], BOUNDS[1], 15), np.linspace(BOUNDS[0], BOUNDS[1], 19))
     Z = objective_function_plot(X, Y)
     
     # OPTIMIZATION: Wireframe is significantly faster than Surface
@@ -311,7 +311,7 @@ def create_pso_animation_file(n_particles, max_iter):
     f.close()
     try: 
         # OPTIMIZATION: Low DPI (40) = Fast Saving
-        anim.save(fname, writer='pillow', fps=7, dpi=60)
+        anim.save(fname, writer='pillow', fps=6, dpi=60)
     except Exception as e: 
         os.remove(fname)
         raise e
