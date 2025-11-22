@@ -235,7 +235,7 @@ def create_pso_animation_file(n_particles, max_iter):
     BOUNDS = [-5.0, 3.5]
     DIM = 2
     # OPTIMIZATION: Reduce frames to minimum needed for smoothness
-    SMOOTHING_STEPS = 2 
+    SMOOTHING_STEPS = 1 
     
     particles_pos = np.random.uniform(low=BOUNDS[0], high=BOUNDS[1], size=(n_particles, DIM))
     particles_vel = np.random.uniform(low=-0.5, high=0.5, size=(n_particles, DIM))
@@ -269,7 +269,7 @@ def create_pso_animation_file(n_particles, max_iter):
     ax2D = fig.add_subplot(122)
     
     # OPTIMIZATION: Reduced grid density (25 vs 60)
-    X, Y = np.meshgrid(np.linspace(BOUNDS[0], BOUNDS[1], 40), np.linspace(BOUNDS[0], BOUNDS[1], 40))
+    X, Y = np.meshgrid(np.linspace(BOUNDS[0], BOUNDS[1], 20), np.linspace(BOUNDS[0], BOUNDS[1], 20))
     Z = objective_function_plot(X, Y)
     
     # OPTIMIZATION: Wireframe is significantly faster than Surface

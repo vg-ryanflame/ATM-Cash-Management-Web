@@ -172,3 +172,20 @@
 2025-11-22 22:30:36,487 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:30:36] "GET /animate_pso HTTP/1.1" 200 -
 2025-11-22 22:30:54,520 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
 2025-11-22 22:30:58,369 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:30:58] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:44:00,915 - werkzeug - INFO -  * Detected change in 'C:\\Users\\ryang\\Downloads\\BFIN WS2025\\ATM-Cash-Management-Web\\app.py', reloading
+2025-11-22 22:44:01,282 - werkzeug - INFO -  * Restarting with stat
+2025-11-22 22:44:06,232 - werkzeug - WARNING -  * Debugger is active!
+2025-11-22 22:44:06,232 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-22 22:44:06,665 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:44:06] "GET / HTTP/1.1" 200 -
+2025-11-22 22:44:11,446 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:44:14,646 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:44:14] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:44:44,784 - werkzeug - INFO -  * Detected change in 'C:\\Users\\ryang\\Downloads\\BFIN WS2025\\ATM-Cash-Management-Web\\app.py', reloading
+2025-11-22 22:44:45,125 - werkzeug - INFO -  * Restarting with stat
+2025-11-22 22:44:50,022 - werkzeug - WARNING -  * Debugger is active!
+2025-11-22 22:44:50,023 - werkzeug - INFO -  * Debugger PIN: 141-755-670
+2025-11-22 22:44:50,472 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:44:50] "GET / HTTP/1.1" 200 -
+2025-11-22 22:44:51,235 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:44:52,794 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:44:52] "GET /animate_pso HTTP/1.1" 200 -
+2025-11-22 22:44:52,867 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:44:52] "GET / HTTP/1.1" 200 -
+2025-11-22 22:44:54,388 - matplotlib.animation - INFO - Animation.save using <class 'matplotlib.animation.PillowWriter'>
+2025-11-22 22:44:56,021 - werkzeug - INFO - 127.0.0.1 - - [22/Nov/2025 22:44:56] "GET /animate_pso HTTP/1.1" 200 -
