@@ -231,11 +231,11 @@ def create_pso_animation_file(n_particles, max_iter):
     2. Low DPI and Figure Size (Faster saving)
     3. Reduced Smoothing Steps (Fewer frames)
     """
-    C1, C2, W = 0.65, 0.45, 0.7
+    C1, C2, W = 0.55, 0.45, 0.75
     BOUNDS = [-5.0, 3.5]
     DIM = 2
     # OPTIMIZATION: Reduce frames to minimum needed for smoothness
-    SMOOTHING_STEPS = 3 
+    SMOOTHING_STEPS = 2 
     
     particles_pos = np.random.uniform(low=BOUNDS[0], high=BOUNDS[1], size=(n_particles, DIM))
     particles_vel = np.random.uniform(low=-0.5, high=0.5, size=(n_particles, DIM))
@@ -311,7 +311,7 @@ def create_pso_animation_file(n_particles, max_iter):
     f.close()
     try: 
         # OPTIMIZATION: Low DPI (40) = Fast Saving
-        anim.save(fname, writer='pillow', fps=8, dpi=60)
+        anim.save(fname, writer='pillow', fps=7, dpi=60)
     except Exception as e: 
         os.remove(fname)
         raise e
@@ -400,7 +400,7 @@ def animate_pso():
     try:
         # Generate GIF to a temp file with aggressively reduced parameters
         # We ignore the user params here for speed, forcing a fast preset
-        gif_path = create_pso_animation_file(n_particles=25, max_iter=15)
+        gif_path = create_pso_animation_file(n_particles=17, max_iter=20)
         return send_file(gif_path, mimetype='image/gif')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
