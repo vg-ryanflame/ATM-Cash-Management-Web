@@ -1378,11 +1378,11 @@ const PRESETS = {
         name: 'Conservative (Low Risk)',
         oppo_rate: 0.005, refill_cost: 800, shortage_fine: 50000, lookahead: 3,
         n_particles: 50, iters: 60, alpha_bound: 2.0, threshold_mult: 1.2,
-        m_auto: false, m_lower: 8000, m_target: 15000, m_upper: 25000
+        m_auto: false, m_lower: 35000, m_target: 75000, m_upper: 55000
     },
     'aggressive': {
         name: 'Aggressive (High Return)',
-        oppo_rate: 0.03, refill_cost: 2000, shortage_fine: 5000, lookahead: 1,
+        oppo_rate: 0.03, refill_cost: 2000, shortage_fine: 5000, lookahead: 2,
         n_particles: 20, iters: 30, alpha_bound: 5.0, threshold_mult: 2.5,
         m_auto: true, m_lower: 3000, m_target: 8000, m_upper: 15000
     }

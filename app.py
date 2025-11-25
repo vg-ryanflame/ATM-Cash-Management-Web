@@ -122,7 +122,7 @@ def pso_optimize(predicted_demand, initial_cash, oppo_rate, refill_cost_val, sho
     # Allow negative thresholds so refills can be avoided entirely
     bounds = (np.array([0.0, -np.max(predicted_demand)]), np.array([alpha_bound, MAX_THRESHOLD]))
     # Improved PSO options for better convergence
-    options = {'c1': 2.0, 'c2': 2.0, 'w': 0.9, 'k': 3, 'p': 2}
+    options = {'c1': 1.5, 'c2': 1.5, 'w': 0.7, 'k': 3, 'p': 2}    
     optimizer = ps.single.GlobalBestPSO(n_particles=n_particles, dimensions=2, options=options, bounds=bounds)
     best_cost, best_pos = optimizer.optimize(cost_for_particles, iters=iters, verbose=False)
     return best_cost, best_pos
@@ -235,7 +235,7 @@ def create_pso_animation_file(n_particles, max_iter):
     BOUNDS = [-5.0, 3.5]
     DIM = 2
     # OPTIMIZATION: Reduce frames to minimum needed for smoothness
-    SMOOTHING_STEPS = 2 
+    SMOOTHING_STEPS = 1 
     
     particles_pos = np.random.uniform(low=BOUNDS[0], high=BOUNDS[1], size=(n_particles, DIM))
     particles_vel = np.random.uniform(low=-0.5, high=0.5, size=(n_particles, DIM))
@@ -304,14 +304,14 @@ def create_pso_animation_file(n_particles, max_iter):
         return scatter3D, scatter2D
 
     # OPTIMIZATION: Interval 30ms (Fast playback)
-    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=100, blit=False)
+    anim = FuncAnimation(fig, update, frames=TOTAL_FRAMES, interval=10, blit=False)
     
     f = tempfile.NamedTemporaryFile(suffix='.gif', delete=False)
     fname = f.name
     f.close()
     try: 
         # OPTIMIZATION: Low DPI (40) = Fast Saving
-        anim.save(fname, writer='pillow', fps=6, dpi=60)
+        anim.save(fname, writer='pillow', fps=8, dpi=60)
     except Exception as e: 
         os.remove(fname)
         raise e
@@ -400,7 +400,7 @@ def animate_pso():
     try:
         # Generate GIF to a temp file with aggressively reduced parameters
         # We ignore the user params here for speed, forcing a fast preset
-        gif_path = create_pso_animation_file(n_particles=12, max_iter=15)
+        gif_path = create_pso_animation_file(n_particles=12, max_iter=20)
         return send_file(gif_path, mimetype='image/gif')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
